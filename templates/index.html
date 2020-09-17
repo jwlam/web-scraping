@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars News Aggregator</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
+</head>
+
+<body class='body'>
+    <div class='container'>
+        <div class='jumbotron text-center'>
+            <h1>Mission to Mars</h1>
+        <p><a class='btn btn-primary btn-lg' href='/scrape' role='button'>Get Latest Mars News!</a></p>
+        </div>
+        
+        <div class='row'>
+            <div class='col-md-12'>
+                <h2>Latest:</h2>
+                <h3>{{ mars_data.news_title }}</h3>
+                <p>{{ mars_data.news_p</p>
+                <hr>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-md-8'>
+                <h2>Featured Mars Image</h2>
+                <a href={{ mars_data.featured_image_url }}><img src={{ mars_data.featured_image_url }} style='width: 100%'; alt='mars image'></a>
+        </div>
+
+        <div class='col-md-4'>
+            <h2>Mars Facts</h2>
+            {% autoescape false %}
+                {{ mars_data.mars_html_table}}
+            {% endautoescape %}
+        </div>
+    </div>
+
+    <br>
+
+    <div class='row'>
+        <div class='col-md-12'>
+            <hr>
+            <h2 class='center'>Hemispheres of Mars</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class='card-deck'>
+        {% for img in mars_data.hemisphere_image_urls[0:2] %}
+        <div class='card'>
+            <div class='card-block'>
+                <h3 class='card-title'>{{img['title'] })</h3>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <br>
+
+    <div class='card-deck'>
+        {% for img in mars_data.hemisphere_image_urls[2:4] %}
+        <div class='card'>
+            <a href="{{ img['img_url'] }}"><img class='card-img-top' src="{{ img['img_url'] }}" alt="{{ img['title'] ))"></a>
+            <div class='card-block'>
+                <h3 class='card-title'>{{ img['title']] }}</h3>
+            </div>
+        {% endfor %}
+        </div>
+    </div>  
+</body>
+</html>
+

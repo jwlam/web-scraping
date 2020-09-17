@@ -31,4 +31,36 @@ def scraper():
     mars_df = table[0]
     mars_df.columns = ['Description', 'Values']
     mars_df.set_index('Description', inplace=True)
+    mars_html_table = mars_df.to_html()
+    mars_html_table = mars_html_table.replace('\n', '')
+
+    hemi_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    hemi_split = hemi_url.split('/search',1)
+    browser.visit(hemi_url)
+    hemi_soup = soup.find('div', class_='collapsible results')
+    hemi_pages = hemi_soup.find_all('div', class_='item')
     
+    hemisphere_image_urls = []
+
+    for page in hemi_pages:
+        hemi_dict = {}
+        title = page.find('div', class_='description').find('a').text
+        hemi_dict['title'] = title
+        hemi_link = page.find('div', class_='description').find('a')['href']
+        browser.visit(hemi_split[0] + hemi_link)
+        hemi_html = browser.html
+        hemisphere_soup = soup(hemi_html, 'html.parser')
+        hemi_img = hemisphere_soup.find('div', class_='content').find('a')['href]']
+        hemi_dict['img_url'] = hemi_img
+        hemisphere_image_urls.append(hemi_dict)
+        browser.back()
+    browser.quit
+
+    mars_data = {
+        'news_title': news_title,
+        'news_p': news_p,
+        'featured_image_url': featured_image_url,
+        'mars_html_table': mars_html_table,
+        'hemisphere_image_urls': hemisphere_image_urls
+    }
+    return mars_data
