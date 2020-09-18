@@ -19,8 +19,8 @@ def scraper():
     html = browser.html
     fresh_soup = soup(html, 'html.parser')
 
-    article = fresh_soup.find('li', class_='slide')
-    #news_title = article.find('div', class_='content_title').text
+    article = fresh_soup.ul(class_='item_list')
+    news_title = article('div', class_='content_title').text
     news_p = article.find('div', class_='article_teaser_body').text
 
     feat_img_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
@@ -68,5 +68,7 @@ def scraper():
         'hemisphere_image_urls': hemisphere_image_urls
     }
     return mars_data
-if __name__ == '__main__':
-    print(scraper())
+
+def confirm(mars_data):
+    if __name__ == '__main__':
+        print(mars_data)
