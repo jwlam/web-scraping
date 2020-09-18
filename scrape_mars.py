@@ -4,25 +4,29 @@ import pandas as pd
 import time
 
 def init_browser():
-    executable_path = {'executable_path': 'chromedriver.exe'}
+    #mac chromedriver
+    executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
+
+    #windows chromedriver
+    #executable_path = {'executable_path': 'chromedriver.exe'}
     return Browser('chrome', **executable_path, headless=False)
 
 def scraper():
-    browser = init_browser
+    browser = init_browser()
     nasa_url = 'https://mars.nasa.gov/news/'
     browser.visit(nasa_url)
 
     html = browser.html
-    soup = soup(html, 'html.parser')
+    soup_new = soup(html, 'html.parser')
 
-    article = soup.find('div', class_='list_text')
-    news_title = article.find('a').text
+    article = soup_new.find('li', class_='slide')
+    news_title = article.find('div', class_='content_title').text
     news_p = article.find('div', class_='article_teaser_body').text
 
     feat_img_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     url_split = feat_img_url.split('/spaceimages', 1)
     browser.visit(feat_img_url)
-    img_details = soup.find('div', id='secondary_column').find_all('div', class_='download_tiff')
+    img_details = soup_new.find('div', id='secondary_column').find_all('div', class_='download_tiff')
     hires_url = img_details[1].find('a')['href']
     featured_image_url = 'https:' + hires_url
 
@@ -37,7 +41,7 @@ def scraper():
     hemi_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     hemi_split = hemi_url.split('/search',1)
     browser.visit(hemi_url)
-    hemi_soup = soup.find('div', class_='collapsible results')
+    hemi_soup = soup_new.find('div', class_='collapsible results')
     hemi_pages = hemi_soup.find_all('div', class_='item')
     
     hemisphere_image_urls = []
@@ -49,7 +53,7 @@ def scraper():
         hemi_link = page.find('div', class_='description').find('a')['href']
         browser.visit(hemi_split[0] + hemi_link)
         hemi_html = browser.html
-        hemisphere_soup = soup(hemi_html, 'html.parser')
+        hemisphere_soup = soup_new(hemi_html, 'html.parser')
         hemi_img = hemisphere_soup.find('div', class_='content').find('a')['href]']
         hemi_dict['img_url'] = hemi_img
         hemisphere_image_urls.append(hemi_dict)
@@ -64,3 +68,5 @@ def scraper():
         'hemisphere_image_urls': hemisphere_image_urls
     }
     return mars_data
+if __name__ == '__main__':
+    print(scraper())

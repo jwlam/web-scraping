@@ -18,7 +18,7 @@
             <div class='col-md-12'>
                 <h2>Latest:</h2>
                 <h3>{{ mars_data.news_title }}</h3>
-                <p>{{ mars_data.news_p</p>
+                <p>{{ mars_data.news_p }}</p>
                 <hr>
             </div>
         </div>
@@ -51,7 +51,7 @@
         {% for img in mars_data.hemisphere_image_urls[0:2] %}
         <div class='card'>
             <div class='card-block'>
-                <h3 class='card-title'>{{img['title'] })</h3>
+                <h3 class='card-title'>{{img['title'] }}</h3>
             </div>
         </div>
         {% endfor %}
@@ -62,9 +62,9 @@
     <div class='card-deck'>
         {% for img in mars_data.hemisphere_image_urls[2:4] %}
         <div class='card'>
-            <a href="{{ img['img_url'] }}"><img class='card-img-top' src="{{ img['img_url'] }}" alt="{{ img['title'] ))"></a>
+            <a href="{{ img['img_url'] }}"><img class='card-img-top' src="{{ img['img_url'] }}" alt="{{ img['title'] }}"></a>
             <div class='card-block'>
-                <h3 class='card-title'>{{ img['title']] }}</h3>
+                <h3 class='card-title'>{{ img['title'] }}</h3>
             </div>
         {% endfor %}
         </div>
