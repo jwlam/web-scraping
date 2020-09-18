@@ -5,10 +5,10 @@ import time
 
 def init_browser():
     #mac chromedriver
-    executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
+    #executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
 
     #windows chromedriver
-    #executable_path = {'executable_path': 'chromedriver.exe'}
+    executable_path = {'executable_path': 'chromedriver.exe'}
     return Browser('chrome', **executable_path, headless=False)
 
 def scraper():
@@ -17,16 +17,16 @@ def scraper():
     browser.visit(nasa_url)
 
     html = browser.html
-    soup_new = soup(html, 'html.parser')
+    fresh_soup = soup(html, 'html.parser')
 
-    article = soup_new.find('li', class_='slide')
-    news_title = article.find('div', class_='content_title').text
+    article = fresh_soup.find('li', class_='slide')
+    #news_title = article.find('div', class_='content_title').text
     news_p = article.find('div', class_='article_teaser_body').text
 
     feat_img_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     url_split = feat_img_url.split('/spaceimages', 1)
     browser.visit(feat_img_url)
-    img_details = soup_new.find('div', id='secondary_column').find_all('div', class_='download_tiff')
+    img_details = fresh_soup.find('div', id='secondary_column').find_all('div', class_='download_tiff')
     hires_url = img_details[1].find('a')['href']
     featured_image_url = 'https:' + hires_url
 
@@ -41,16 +41,16 @@ def scraper():
     hemi_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     hemi_split = hemi_url.split('/search',1)
     browser.visit(hemi_url)
-    hemi_soup = soup_new.find('div', class_='collapsible results')
+    hemi_soup = fresh_soup.find('div', class_='collapsible results')
     hemi_pages = hemi_soup.find_all('div', class_='item')
     
     hemisphere_image_urls = []
 
-    for page in hemi_pages:
+    for hemi in hemi_pages:
         hemi_dict = {}
-        title = page.find('div', class_='description').find('a').text
+        title = hemi.find('div', class_='description').find('a').text
         hemi_dict['title'] = title
-        hemi_link = page.find('div', class_='description').find('a')['href']
+        hemi_link = hemi.find('div', class_='description').find('a')['href']
         browser.visit(hemi_split[0] + hemi_link)
         hemi_html = browser.html
         hemisphere_soup = soup_new(hemi_html, 'html.parser')
